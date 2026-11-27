@@ -1,10 +1,55 @@
 # method/process.md
 
-Part of Kowloon, the method of `ALIGNMENT.md`, version 0.9 (draft). Read it before you take any step of the alignment process, or write a report, a candidate, a divergence, a delta or a lesson. Section numbers run across all the files of the method.
+Part of Kowloon, the method of `ALIGNMENT.md`. Read it before you take any step of the alignment process, or write a report, a candidate, a divergence, a delta or a lesson.
 
 ## 7. The alignment process
 
 Work one step at a time. Each step ends with a report and a wait for the maintainer.
+
+The drawing is informative; the text below it is the rule. Rounded boxes are the maintainer's or the tutor's; square boxes are yours.
+
+```mermaid
+flowchart TD
+    breath("Maintainer calls the deep breath (section 1)") --> pre["Pre-flight"]
+    pre --> s0["Step 0. Inventory"]
+    s0 --> s1["Step 1. Pilot: steps 5 and 6 once. Not an area"]
+    s1 --> s2["Step 2. Baseline"]
+    s2 --> s3["Step 3. Propose classes"]
+    s3 --> s4["Step 4. Triage"]
+    s4 --> pick("Maintainer picks the next capability, by the ranking in BINDINGS.md")
+    subgraph slice["One slice, within its time box. One pass per unit: project, capability, modules, core detail"]
+        extract["Step 5. Extract blind, record the rules and plans, show nothing"]
+        subgraph cycle["The intent cycle (section 3)"]
+            name["Name the unit"] --> line("Maintainer writes one line on paper and says it is written")
+            line --> showline["Show your one line"]
+            showline --> para("Maintainer writes a paragraph on paper and says it is written")
+            para --> showpara["Show your paragraph"]
+            showpara --> spec("Maintainer compares, rules, and writes the spec items")
+        end
+        extract --> name
+        showpara --> cands["Write the candidates, report and wait"]
+        cands --> s6["Step 6. Record divergences, rulings left blank"]
+        s6 --> spec
+        spec --> closed("Maintainer says the level is closed")
+        closed -->|"Descend: next unit. At core detail the tutor answers"| extract
+    end
+    pick --> extract
+    closed -->|"Slice done, or time box over"| close("Maintainer closes the area with one signed statement")
+    close -->|"First area"| resume("Maintainer says work may resume: the deep breath ends")
+    close -->|"More capabilities"| pick
+    close -->|"Nothing left to align"| done("Maintainer signs that the repository is aligned")
+    close --> after["Closed area: section 17 holds from now on, the gate is the second line"]
+    after -->|"A change of intent later (section 8)"| name
+```
+
+### The deep breath
+
+Section 1 of `ALIGNMENT.md` is the rule. These are its records.
+
+- **The list.** `alignment/in-flight.md` has one line per unfinished item, with its branch, its files, its capability and its state: uncommitted; committed, not pushed; pushed, no pull request; pull request open; complete, awaiting a gate or a merge; parked. Where one item depends on another, the line says so.
+- **Running jobs.** A build, gate or sweep that was already running may end. Record its result. Start no other, and open or merge nothing on the strength of it.
+- **Other machines.** The deep breath covers every session on every machine. A session that relays it says whose instruction it relays; a session that receives a relayed deep breath confirms it with its own user. The list records each machine as confirmed or not.
+- **Open issues.** They are frozen under the hold label. A frozen issue is evidence for the extraction, not a work item. Nothing is closed. A finding made during alignment is recorded under `alignment/`, not filed.
 
 ### Pre-flight
 
@@ -21,11 +66,11 @@ Produce `alignment/inventory.md`: the top-level layout; every agent instruction 
 
 ### Step 1. Pilot
 
-Run steps 5 and 6 once, on the pilot named in `BINDINGS.md`, to find out whether the method holds before the rest is committed to. The pilot is marked as one in `alignment/status.md`. Alignment proper proceeds from the project level down; a pilot may start with the most mechanical part.
+Run steps 5 and 6 once, on the pilot named in `BINDINGS.md`, to find out whether the method holds before the rest is committed to. The pilot is marked as one in `alignment/status.md`. It is not an area, and closing it does not end the deep breath. Alignment proper proceeds from the project level down; a pilot may start with the most mechanical part.
 
 ### Step 2. Baseline
 
-Where and when the maintainer says: run the existing tests and checks as they are, without changing them, and write each check's status to `alignment/baseline.md`, including checks that already fail. Run twice; a check whose result differs is marked flaky. A check that is statistical by design is a budget: a pass rate over a stated number of runs, with seeds and versions pinned, never rerun to pass. Record the budget measurements here once budgets exist. No change to source is made before the baseline exists.
+Where and when the maintainer says: run the existing tests and checks as they are, without changing them, and write each check's status to `alignment/baseline.md`, including checks that already fail. Run twice; a check whose result differs is marked flaky. A check that is statistical by design is a budget: a pass rate over a stated number of runs, with seeds and versions pinned, never rerun to pass. Record the budget measurements here once budgets exist. No change to source is made before the baseline exists, except a fix under the wrong-result exception of section 1.
 
 ### Step 3. Propose classes
 
@@ -33,7 +78,7 @@ Draft `alignment/proposed.gitattributes`: a `class` for every tracked path, and 
 
 ### Step 4. Triage
 
-**Untried.** Read-only tasks, each returning a short table under `alignment/triage/`:
+Read-only tasks, each returning a short table under `alignment/triage/`:
 
 1. Every interface capability, with its inputs, outputs and outcomes, and where interfaces differ.
 2. What each capability reaches, taken from tooling and not from judgement.
@@ -43,7 +88,7 @@ Draft `alignment/proposed.gitattributes`: a `class` for every tracked path, and 
 6. Experiment candidates: feature flags, names such as unstable or prototype, hidden commands, code reachable only behind a flag, recent churn with thin tests. Recently touched and unreachable suggests an experiment; old and unreachable suggests dead code.
 7. Which checks exist, whether each can fail, and which paths a fault-injection control already covers.
 
-From these, list the unexplained and unreachable findings, and propose `zone=supporting` in `alignment/proposed.gitattributes` only for paths that item 7 shows are covered. Report nothing as unreachable until the maintainer has ruled out an experiment. Items 2 and 4 are run again for each release report (section 11).
+From these, list the unexplained findings and the possibly unreachable ones, and propose `zone=supporting` in `alignment/proposed.gitattributes` only for paths that item 7 shows are covered. A finding is called unreachable only after the maintainer has ruled out an experiment. Items 2 and 4 are run again for each release report (section 11).
 
 Do the cheap tasks first: 1, 3, 6 and 7 need only git, search and the test runner. Task 2 is approximate: test coverage shows what a capability's tests reach, not all that is reachable. Fault injection is costly, so it is sampled. Every table is a proposal for the maintainer, never a classification.
 
@@ -51,11 +96,11 @@ Do the cheap tasks first: 1, 3, 6 and 7 need only git, search and the test runne
 
 Alignment proceeds by interface capability, from the project level down: project, capability, modules.
 
-**Order of traversal. Untried.**
+**Order of traversal.**
 
 - **Two passes.** First, across everything: the project item and one `purpose` line per capability, before going deep anywhere. Then one capability at a time.
 - **Direction.** Confirmation runs from the top down. Evidence is gathered from the code up.
-- **Which capability next.** By the ranking in `BINDINGS.md`. In general: where wrong results are already reported; then the most valuable promise with the least protection; then the capability crossing the most shared core modules, which makes later slices cheaper. Frequency of use only breaks ties.
+- **Which capability next.** By the ranking in `BINDINGS.md`.
 - **Cost of checks.** It decides when work is affordable, not the order: the cheapest to check suits a pilot, and a heavy suite waits for the machine that can run it.
 - **Within a slice.** The interface boundary first, then the modules on a path that can change a result, then the rest.
 - **Shared modules.** Aligned once, by the first slice that reaches them. Later slices add links and checks.
@@ -63,13 +108,15 @@ Alignment proceeds by interface capability, from the project level down: project
 
 At each level, for the current slice only:
 
-1. The maintainer writes the intent for that level separately. You will not be shown it. Do not ask for it and do not look for it.
-2. In a fresh, blind session, extract candidate intent from the artifacts at that level: what the code does, what it assumes about its environment, what it promises to callers.
+1. Name the unit under alignment: its level and what it is. This opens the intent cycle of section 3.
+2. In a fresh, blind session, extract candidate intent from the artifacts at that level: what the code does, what it assumes about its environment, what it promises to callers. Show none of it yet.
 3. Record the status-quo rules and plan items that concern this area as candidates too: quote each exactly, cite file and line, flag rules that conflict with each other or with the code. Do not judge them and do not propose removals.
-4. Write the candidates to `alignment/candidates/<level>-<slice>.md`.
-5. Report and wait. The maintainer compares the candidates with their own statement. Descend only when the maintainer says the level is closed.
+4. Run the two paper rounds of the intent cycle: one line, then one paragraph. Your line and your paragraph come from the extraction.
+5. Write the candidates to `alignment/candidates/<level>-<slice>.md`, opening with your line and your paragraph, both labelled as inference.
+6. Report and wait. The maintainer compares your line, your paragraph and the candidates with what is on the paper, and returns the differences (step 6).
+7. The level is closed when the maintainer has ruled on those differences, has written the unit's spec items, and says "closed". Descend only then.
 
-In core zones, continue to detail level only for files, types and functions that need a check the module item cannot anchor: those that carry a property, or are safety- or security-relevant. There the maintainer does not write separately: the tutor answers what each is for, and the maintainer reviews the candidates directly.
+In core zones, continue to detail level only for files, types and functions that need a check the module item cannot anchor: those that carry a property, or are safety- or security-relevant. The cycle is the same there; the unit is a file, a type or a function, and the tutor answers what it is for.
 
 Rules for extraction:
 
@@ -87,9 +134,9 @@ When the maintainer returns a comparison, draft one entry per difference in `ali
 
 ### Plans and unfinished work
 
-**Untried.**
 
-- **Plans.** A plan item gains force only when the maintainer restates it as a spec item, and for something not yet built, only when work on it is about to start. Every plan is treated as agent-written unless the maintainer says otherwise. That the maintainer's text or the code agrees with a plan is not confirmation. No list of parked items is kept. Where plans live outside the repository, the blind session is given the ones that concern its slice.
+
+- **Plans.** This is the rule for plans; other files point here. A plan item gains force only when the maintainer restates it as a spec item, and for something not yet built, only when work on it is about to start. Every plan is treated as agent-written unless the maintainer says otherwise. That the maintainer's text or the code agrees with a plan is not confirmation. No list of parked items is kept. Where plans live outside the repository, the blind session is given the ones that concern its slice.
 - **Unfinished work.** A line of `alignment/in-flight.md` is ruled on when its capability is traversed: named for removal (section 2 decides when), or re-entered after the area closes as a requested change (section 8) or as an experiment (section 9), with the branch as reference only. Unruled lines stay paused. The capability on each line informs the maintainer's choice of what to traverse next; it does not change the order.
 - **The roadmap afterwards.** It is the release report's unserved items plus the open deltas. It is short on purpose: longer-range direction lives in `purpose` items and in informative plans.
 
@@ -97,11 +144,11 @@ When the maintainer returns a comparison, draft one entry per difference in `ali
 
 A report gives: what was written, with counts by source; open questions for the maintainer; and anything you could not explain. "Unknown" is a valid finding; do not invent a purpose.
 
-`alignment/status.md` is the record of where the process stands: one row per step, and per slice and level, with its state (not started, intent written, extracted, compared, closed), the candidate count, the open divergences, and the commit that closed it. Update the row in the same commit as the step's output. When a slice closes, its rows collapse to one line with the closing commit.
+`alignment/status.md` is the record of where the process stands: one row per step, and per slice and level, with its state (not started, extracted, intent written, compared, closed), the candidate count, the open divergences, and the commit that closed it. Update the row in the same commit as the step's output. When a slice closes, its rows collapse to one line with the closing commit.
 
 ### Closing an area
 
-Only the maintainer closes an area, with one signed closing statement.
+An area is one capability together with the modules it reaches. Only the maintainer closes it, when its slice is done, with one signed closing statement. Closing the first area lets the maintainer end the deep breath (section 1).
 
 - **Rules.** The statement names each status-quo rule that is confirmed into `spec/` or retired. A rule it does not name is kept. The instruction files come into line the same way: confirmed intent moves to `spec/` and leaves a pointer, retired text is removed, rules about how agents work stay.
 - **Files.** A file it does not name must link to an item, or it is reported as unassigned.
@@ -111,7 +158,7 @@ Only the maintainer closes an area, with one signed closing statement.
 
 Act only on what the statement says.
 
-## 12. Formats and commits
+## 12. Formats
 
 Candidate intent:
 
@@ -144,20 +191,19 @@ decision: <blank until the maintainer decides>
 status: open
 ```
 
-Proposed delta (**untried**):
+Proposed delta:
 
 ```
 delta: <DIV id, or the unit of a requested change>
-ADDED      <the whole new spec item>
-MODIFIED   <spec id>@<signed version>
-           <the whole item as it would read, with its version bumped where section 3 requires>
+ADDED      <one line: what a new item would have to cover, and why>
+MODIFIED   <spec id>@<signed version>   <one line: what would differ, and whether section 3 requires a version bump>
 REMOVED    <spec id>@<signed version>   <one line: why>
 ```
 
-- One file per divergence or requested change. It holds only what would differ; it never restates the spec.
+- One file per divergence or requested change. It holds only what would differ; it never restates the spec and never words an item.
 - Each entry names the item at its signed version. A delta that names any other version is out of date and is redrafted.
 - An id never changes, so there is no entry for renaming.
-- The delta is a proposal. The maintainer writes the change under `spec/`, or ratifies the delta as written, and signs.
+- The delta is a proposal. The maintainer runs the intent cycle of section 3 for its unit, writes the change under `spec/`, and signs.
 
 Method lesson:
 
@@ -177,5 +223,5 @@ status: proposed | decided | adopted in <version> | rejected — <reason>
 - **When.** At the end of a step, with the step's report: append each lesson to `alignment/lessons.md` as `proposed`, quoting the maintainer's words where it came from a decision. The maintainer confirms them in one batch. A lesson is deleted once a signed version of the method carries it. A rejected lesson keeps its id and one line of reason, so it is not proposed again.
 - **A lesson is about the method, never about the product.** Something that reads like the project's intent is a candidate.
 - **A lesson has no force until the method carries it and the maintainer signs.**
-- **A new obligation enters only this way,** and stays marked untried until a pilot has exercised it.
-- **Obligations also leave.** A part marked untried is removed at the next signed version unless `alignment/status.md` shows a pilot that exercised it. Each file of the method has a word cap (section 11); to add, something else is shortened or removed, or the maintainer raises the cap.
+- **A new obligation enters only this way.**
+- **Files stay short.** Each file of the method has a word cap (section 11); to add, something else is shortened or removed, or the maintainer raises the cap.

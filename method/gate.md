@@ -1,12 +1,12 @@
 # method/gate.md
 
-Part of Kowloon, the method of `ALIGNMENT.md`, version 0.9 (draft). Read it before you work on signing or the gate. Neither is started except on the maintainer's explicit, signed instruction. Section numbers run across all the files of the method.
+Part of Kowloon, the method of `ALIGNMENT.md`. Read it before you work on signing or the gate. Neither is started except on the maintainer's explicit instruction.
 
 ## 10. Signing and the key registry
 
 Not to be started by an agent. The maintainer creates these.
 
-- **Intent is signed as content.** A manifest lists the hash of every file under `spec/`, of `ALIGNMENT.md`, `BINDINGS.md` and the files under `method/`, of `.gitattributes`, and of the gate script and the job that runs it. The maintainer signs the manifest with a key held on a hardware token that needs a touch. The check does not depend on how a change was merged or on the hosting service, and an agent cannot produce the signature.
+- **Intent is signed as content.** A manifest lists the hash of every file under `spec/`, of `ALIGNMENT.md`, `BINDINGS.md` and the files under `method/`, of `.gitattributes`, and of the gate script and the job that runs it. The maintainer signs the manifest with an SSH signing key that no agent session can read or use. `BINDINGS.md` says how the key is kept out of reach. Pre-flight (section 7) reports whether a session could sign; while it could, nothing signed with that key counts. The check does not depend on how a change was merged or on the hosting service, and an agent cannot produce the signature.
 - **The key registry is `spec/signers`.** It is under `spec/`, where section 6 forbids agents to write, and it is covered by the manifest.
 - **A registry in the change under review is never trusted.** The gate takes the registry from the last verified state, which is the tip of the protected branch, and verifies the new manifest against that. A change to the registry is valid only if the manifest that contains it verifies against the registry as it stood before.
 - **The root of trust is outside the repository.** The first key's fingerprint is confirmed between people and pinned in two places no agent session can write: the hosting service's configuration for the required check, and the maintainer's own machine. The required check runs the gate as it is defined on the protected branch, not as the change defines it.
@@ -19,7 +19,7 @@ The trace map is deliberately not in the manifest; section 5 says why that is sa
 
 ## 11. The gate
 
-Not to be started; each part begins only on the maintainer's explicit, signed instruction. A single script, run locally and as a required check, verifies with text tools only:
+Not to be started; each part begins only on the maintainer's explicit instruction. A single script, run locally and as a required check, verifies with text tools only:
 
 - the manifest and its signature, as in section 10;
 - that every tracked path has a class, every derived path has an intent, and every intent names a signed spec item;
@@ -32,7 +32,7 @@ Not to be started; each part begins only on the maintainer's explicit, signed in
 - that every path marked supporting still has its fault-injection check;
 - that no linked check that passed in the baseline now fails;
 - the change-of-intent conditions of section 8;
-- that a closed slice has no candidates, deltas or task lists left under `alignment/`;
+- that a closed area has no candidates, deltas or task lists left under `alignment/`;
 - that `ALIGNMENT.md` and each file under `method/` is within its word cap, constants in the gate script set at the sizes of the signed version.
 
 An agent's part in enforcement is to run the script and read its exit code. In an area that is not closed the gate reports and never fails; in a closed area it fails. A gate that uses an external tool pins a released version of it.
@@ -55,7 +55,7 @@ An agent may draft the script and the fixtures; the maintainer signs them. The f
 - remote branches older than an age the maintainer sets;
 - core modules changed since the tutor last answered for them, as the list for the sampled conversation.
 
-**Sampled, with the report. Untried.** A blind session that has not seen a check plants a violation from the item's sentence, in the code or in an agent's instructions and never on a physical rig. A check that still passes is a finding. A statistical check is scored over its full run count.
+**Sampled, with the report.** A blind session that has not seen a check plants a violation from the item's sentence, in the code or in an agent's instructions and never on a physical rig. A check that still passes is a finding. A statistical check is scored over its full run count.
 
 The maintainer signs the report once. A removal it names needs no further ruling. Worktrees, stashes and untracked files on a machine are that machine's owner's to clear and need no ruling.
 
