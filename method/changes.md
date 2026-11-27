@@ -16,7 +16,6 @@ A change of intent starts as a change to `spec/`, written by the maintainer thro
 | Changing what an outcome code or a verdict means, or changing a default | Yes |
 | Removing or weakening a promise, loosening a budget, adding or strengthening an assumption | Yes |
 | Adding a dependency, a permission or a data flow a `constraint` does not allow | Yes |
-| Lowering a path from core to supporting | Yes |
 | Promoting an experiment | Yes |
 | Fixing code so that it does what an item already says | No |
 | Refactoring, with every linked check unchanged and passing | No |
@@ -45,7 +44,7 @@ Adding a link or a check to an existing item at its current version is not a cha
 
 ### Assumptions
 
-You may propose an assumption; the maintainer justifies and signs it. With the proposal, give:
+You may propose, in a delta, that an assumption is needed; the maintainer writes, justifies and signs it. With the proposal, give:
 
 - the behaviour that depends on it, which will name it in `under:`;
 - a generated line naming every check that went from failing to passing with the assumption, which shows when a failing promise is being turned into one;
@@ -67,5 +66,5 @@ Assume the repository holds code that is built but not committed to.
 - An experiment has a `hypothesis` item with a `review-by:` date and no checks.
 - It is off by default. Linked checks and budgets run with experiments off and are unaffected by them. Existing experimental code with no switch is a finding; adding one is a change, made after its area is closed.
 - Stable code never depends on experimental code. A `constraint` says so and the dependency listing checks it.
-- On promotion the maintainer writes the real item. The experimental code is evidence for it, and is then regenerated, or reviewed under the binding of its new zone.
+- On promotion the maintainer writes the real item. The experimental code is evidence for it, and is then regenerated, or reviewed like any other derived work.
 - An experiment past its date is reported everywhere and fails the gate in a closed area. Extending the date is a version bump, so it is signed.

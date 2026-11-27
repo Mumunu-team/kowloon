@@ -31,7 +31,7 @@ You also need:
 | `method/intent.md` | The agent, and you | When classifying files or writing intent |
 | `method/process.md` | The agent, and you | At each alignment step |
 | `method/changes.md` | The agent | When you ask for a change to code |
-| `method/gate.md` | You | When the first area is about to close |
+| `method/gate.md` | You, and the agent | When the first area is about to close |
 
 Read `ALIGNMENT.md` in full before starting. It is about 1,300 words. Skim the rest.
 
@@ -64,7 +64,8 @@ flowchart TD
     s3 --> s4
     s5 --> s6
     s12 --> after["After the pilot: baseline, classes, triage"]
-    after --> slice("First slice: the same cycle, then you close it as the first area")
+    after --> strat("The project and its strategies, same cycle: assurance, compliance, documentation")
+    strat --> slice("First slice: the same cycle, then you close it as the first area")
     slice --> resume("You say work may resume: the deep breath ends")
 ```
 
@@ -87,7 +88,7 @@ flowchart TD
     Steps 7 to 11 are the intent cycle, and they run once per unit. To refine further, go one level down: the agent names the next unit, a module the capability reaches, and the cycle starts again with a new line and a new paragraph on paper. Stop when the pilot has told you enough, or when its time box ends.
 12. **Stop and review the method.** Note what was missing, what was never used, and what got in the way. Strike the unused parts before going further.
 
-Only after the pilot: the baseline, proposed classes, triage, and the first slice. Only when that first area is ready to close: signing and the gate. Once it is closed, you may end the deep breath. The pilot alone does not end it.
+Only after the pilot: the baseline, proposed classes, triage, then the project as a whole and its strategies, and then the first slice. The strategies are assurance (how the project tests and verifies), compliance and documentation; `BINDINGS.md` may name others. Each one that exists is a unit like any other: the agent names it, you write a line and a paragraph on paper, and the agent shows what the repository suggests. At this point you write only what the strategy is for and what it leaves out on purpose; its binding rules come when an area closes. Where there is no strategy, the agent says so and invents nothing. Only when that first area is ready to close: signing and the gate. Once it is closed, you may end the deep breath. The pilot alone does not end it.
 
 The same cycle is used later for every change of intent: the agent names the unit, you write a line and then a paragraph on paper, and you write the spec.
 
@@ -110,7 +111,7 @@ Ownership is the left column. Clear boundaries keep the agent in the right one.
 
 ## What you can ignore at first
 
-Zones, budgets, signed assumptions, experiments, the order of traversal, the reading check, the release report and the gate. The pilot needs none of them.
+Budgets, signed assumptions, experiments, the order of traversal, the reading check, the release report and the gate. The pilot needs none of them.
 
 ## Mistakes to avoid
 

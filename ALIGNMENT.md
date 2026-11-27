@@ -6,8 +6,8 @@ This repository should follow the rules declared in this file and the files unde
 
 | Before you | Read | It holds |
 | --- | --- | --- |
-| Propose a class, a zone or a link, extract or draft a candidate, or take part in the intent cycle | `method/intent.md` | 3 Intent, 4 Zones, 5 Links and checks |
-| Take any step of the alignment process, or write a report, a candidate, a divergence, a delta or a lesson | `method/process.md` | 7 The alignment process, 12 Formats, 14 Method lessons |
+| Propose a class or a link, extract or draft a candidate, or take part in the intent cycle | `method/intent.md` | 3 Intent, 4 Binding and findings, 5 Links and checks |
+| Take any step of the alignment process, or write a report, a candidate, a divergence, a finding, a delta or a lesson | `method/process.md` | 7 The alignment process, 12 Formats, 14 Method lessons |
 | Change anything outside `alignment/` at the maintainer's request, or draft a proposal for later adoption | `method/changes.md` | 8 Changing things, 9 Experiments |
 | Work on signing or the gate, which only the maintainer's explicit instruction starts | `method/gate.md` | 10 Signing and the key registry, 11 The gate |
 
@@ -38,8 +38,8 @@ Until an area has been aligned and the maintainer has closed it, everything that
 
 ## 6. Roles and limits
 
-- **Maintainer:** the repository owner. Decides what is intent, writes and signs every change under `spec/`, decides zones, and closes areas.
-- **Tutor:** answers for derived work on core paths: what it is for and how it links to its source.
+- **Maintainer:** the repository owner. Decides what is intent, writes and signs every change under `spec/`, and closes areas.
+- **Tutor:** answers for derived work: what it is for and how it links to its source.
 - **Agent (you):** extract, cross-reference, draft candidates and proposals, generate questions, run scripts, report.
 
 At all times, during alignment and after it, you may not:
@@ -61,7 +61,7 @@ When unsure whether an action is allowed, do not take it. Ask.
 - A status-quo rule conflicts with this file or a file under `method/`, or with another status-quo rule. Do not pick one.
 - You find secrets, credentials or third-party code with unclear licensing.
 - A step would require changing anything outside `alignment/`.
-- You cannot tell which class or zone a path belongs to.
+- You cannot tell which class a path belongs to.
 - You have built on your own earlier output for more than one step without the maintainer reviewing it.
 - A deep breath you relayed to another machine has not been confirmed there.
 - A change you are asked to make in a closed area would alter what a signed item says, or behaviour that no item mentions.

@@ -1,6 +1,6 @@
 # method/process.md
 
-Part of Kowloon, the method of `ALIGNMENT.md`. Read it before you take any step of the alignment process, or write a report, a candidate, a divergence, a delta or a lesson.
+Part of Kowloon, the method of `ALIGNMENT.md`. Read it before you take any step of the alignment process, or write a report, a candidate, a divergence, a finding, a delta or a lesson.
 
 ## 7. The alignment process
 
@@ -16,8 +16,9 @@ flowchart TD
     s1 --> s2["Step 2. Baseline"]
     s2 --> s3["Step 3. Propose classes"]
     s3 --> s4["Step 4. Triage"]
-    s4 --> pick("Maintainer picks the next capability, by the ranking in BINDINGS.md")
-    subgraph slice["One slice, within its time box. One pass per unit: project, capability, modules, core detail"]
+    s4 --> first["First pass, each unit through the intent cycle: the project, the strategies for assurance, compliance and documentation, one purpose line per capability"]
+    first --> pick("Maintainer picks the next capability, by the ranking in BINDINGS.md")
+    subgraph slice["One slice, within its time box. One pass per unit: capability, modules, detail"]
         extract["Step 5. Extract blind, record the rules and plans, show nothing"]
         subgraph cycle["The intent cycle (section 3)"]
             name["Name the unit"] --> line("Maintainer writes one line on paper and says it is written")
@@ -31,7 +32,7 @@ flowchart TD
         cands --> s6["Step 6. Record divergences, rulings left blank"]
         s6 --> spec
         spec --> closed("Maintainer says the level is closed")
-        closed -->|"Descend: next unit. At core detail the tutor answers"| extract
+        closed -->|"Descend: next unit. At detail level: one line, and the tutor answers"| extract
     end
     pick --> extract
     closed -->|"Slice done, or time box over"| close("Maintainer closes the area with one signed statement")
@@ -62,7 +63,7 @@ Check each of these and report what you find. Fix none of them yourself.
 
 ### Step 0. Inventory (read-only)
 
-Produce `alignment/inventory.md`: the top-level layout; every agent instruction and context source, including those outside the repository, with where they live; every prose location; and the external references the code depends on. Verify everything against the actual files.
+Produce `alignment/inventory.md`: the top-level layout; every agent instruction and context source, including those outside the repository, with where they live; every prose location; where tests, checks, compliance evidence and documents live, and any text that states a strategy for them; and the external references the code depends on. Verify everything against the actual files.
 
 ### Step 1. Pilot
 
@@ -86,11 +87,11 @@ Read-only tasks, each returning a short table under `alignment/triage/`:
 4. Duplication.
 5. Behaviour no capability asks for.
 6. Experiment candidates: feature flags, names such as unstable or prototype, hidden commands, code reachable only behind a flag, recent churn with thin tests. Recently touched and unreachable suggests an experiment; old and unreachable suggests dead code.
-7. Which checks exist, whether each can fail, and which paths a fault-injection control already covers.
+7. Which checks exist, and whether each can fail.
 
-From these, list the unexplained findings and the possibly unreachable ones, and propose `zone=supporting` in `alignment/proposed.gitattributes` only for paths that item 7 shows are covered. A finding is called unreachable only after the maintainer has ruled out an experiment. Items 2 and 4 are run again for each release report (section 11).
+From these, record the unexplained findings and the possibly unreachable ones (section 4). Tasks 2 and 4 are run again for each release report (section 11).
 
-Do the cheap tasks first: 1, 3, 6 and 7 need only git, search and the test runner. Task 2 is approximate: test coverage shows what a capability's tests reach, not all that is reachable. Fault injection is costly, so it is sampled. Every table is a proposal for the maintainer, never a classification.
+Do the cheap tasks first: 1, 3, 6 and 7 need only git, search and the test runner. Task 2 is approximate: test coverage shows what a capability's tests reach, not all that is reachable. Showing that a check can fail is costly, so it is sampled. Every table is a proposal for the maintainer, never a classification.
 
 ### Step 5. Extract a slice
 
@@ -98,7 +99,7 @@ Alignment proceeds by interface capability, from the project level down: project
 
 **Order of traversal.**
 
-- **Two passes.** First, across everything: the project item and one `purpose` line per capability, before going deep anywhere. Then one capability at a time.
+- **Two passes.** First, across everything: the project item, the strategies where they exist (section 3), and one `purpose` line per capability, before going deep anywhere. Then one capability at a time.
 - **Direction.** Confirmation runs from the top down. Evidence is gathered from the code up.
 - **Which capability next.** By the ranking in `BINDINGS.md`.
 - **Cost of checks.** It decides when work is affordable, not the order: the cheapest to check suits a pilot, and a heavy suite waits for the machine that can run it.
@@ -111,12 +112,12 @@ At each level, for the current slice only:
 1. Name the unit under alignment: its level and what it is. This opens the intent cycle of section 3.
 2. In a fresh, blind session, extract candidate intent from the artifacts at that level: what the code does, what it assumes about its environment, what it promises to callers. Show none of it yet.
 3. Record the status-quo rules and plan items that concern this area as candidates too: quote each exactly, cite file and line, flag rules that conflict with each other or with the code. Do not judge them and do not propose removals.
-4. Run the two paper rounds of the intent cycle: one line, then one paragraph. Your line and your paragraph come from the extraction.
+4. Run the paper rounds of the intent cycle. Your line and your paragraph come from the extraction.
 5. Write the candidates to `alignment/candidates/<level>-<slice>.md`, opening with your line and your paragraph, both labelled as inference.
-6. Report and wait. The maintainer compares your line, your paragraph and the candidates with what is on the paper, and returns the differences (step 6).
+6. Report and wait. The maintainer compares your line, your paragraph and the candidates with what is on the paper, and returns the differences, which you record as divergences.
 7. The level is closed when the maintainer has ruled on those differences, has written the unit's spec items, and says "closed". Descend only then.
 
-In core zones, continue to detail level only for files, types and functions that need a check the module item cannot anchor: those that carry a property, or are safety- or security-relevant. The cycle is the same there; the unit is a file, a type or a function, and the tutor answers what it is for.
+Continue to detail level only for files, types and functions that need a check the module item cannot anchor: those that carry a property, or are safety- or security-relevant. There the cycle is shorter (section 3): one line on paper, no paragraph, and the tutor answers what the unit is for.
 
 Rules for extraction:
 
@@ -134,8 +135,6 @@ When the maintainer returns a comparison, draft one entry per difference in `ali
 
 ### Plans and unfinished work
 
-
-
 - **Plans.** This is the rule for plans; other files point here. A plan item gains force only when the maintainer restates it as a spec item, and for something not yet built, only when work on it is about to start. Every plan is treated as agent-written unless the maintainer says otherwise. That the maintainer's text or the code agrees with a plan is not confirmation. No list of parked items is kept. Where plans live outside the repository, the blind session is given the ones that concern its slice.
 - **Unfinished work.** A line of `alignment/in-flight.md` is ruled on when its capability is traversed: named for removal (section 2 decides when), or re-entered after the area closes as a requested change (section 8) or as an experiment (section 9), with the branch as reference only. Unruled lines stay paused. The capability on each line informs the maintainer's choice of what to traverse next; it does not change the order.
 - **The roadmap afterwards.** It is the release report's unserved items plus the open deltas. It is short on purpose: longer-range direction lives in `purpose` items and in informative plans.
@@ -148,13 +147,14 @@ A report gives: what was written, with counts by source; open questions for the 
 
 ### Closing an area
 
-An area is one capability together with the modules it reaches. Only the maintainer closes it, when its slice is done, with one signed closing statement. Closing the first area lets the maintainer end the deep breath (section 1).
+Only the maintainer closes an area, when its slice is done, with one signed closing statement. Closing the first area lets the maintainer end the deep breath (section 1).
 
 - **Rules.** The statement names each status-quo rule that is confirmed into `spec/` or retired. A rule it does not name is kept. The instruction files come into line the same way: confirmed intent moves to `spec/` and leaves a pointer, retired text is removed, rules about how agents work stay.
 - **Files.** A file it does not name must link to an item, or it is reported as unassigned.
+- **Strategies.** For each strategy the statement says "rules written" or "none". Rules written here bind this area (section 3).
 - **Tests.** Tests recorded as vacuous or fitted to the implementation are ruled on in the same statement.
 - **Removals.** A removal named in the statement needs no further ruling. An unreachable finding is confirmed by removing the code and running the linked checks; if one fails, it was reachable after all.
-- **Records end here.** Closing deletes the slice's candidates, deltas, closed divergences and any task list left over; git keeps them. Triage tables are replaced by each release report. Open divergences stay. The slice's lines in `alignment/read-checks.md` collapse to one.
+- **Records end here.** Closing deletes the slice's candidates, deltas, closed divergences and any task list left over; git keeps them. Closing the first area also deletes the first-pass candidates for the project and the strategies. Triage tables are replaced by each release report. Open divergences stay. The slice's lines in `alignment/read-checks.md` collapse to one.
 
 Act only on what the statement says.
 
@@ -165,7 +165,7 @@ Candidate intent:
 ```
 id: CAND-<level>-<nnn>
 level: project | capability | module | detail
-slice: <slice name> | general
+slice: <slice name> | strategy-<name> | general
 statement: <one sentence: what must be true, or the rule quoted exactly>
 kind: behaviour | constraint | budget | assumption | working-rule
 source: code | instruction-file | memory | log | plan | prose | comment | issue
@@ -189,6 +189,17 @@ proposed-delta: <path under alignment/deltas/, or none>
 classification: <blank until the maintainer decides>
 decision: <blank until the maintainer decides>
 status: open
+```
+
+Finding:
+
+```
+id: FIND-<nnn>
+finding: unexplained | possibly-unreachable | unreachable
+unit: <path or symbol, or the interfaces or documents that disagree>
+evidence: <path:line, or the triage table and row>
+question: <what the maintainer needs to answer>   asked: <YYYY-MM-DD>
+exit: <blank> | item <spec id> | experiment <spec id> | removed in <closing statement or release report>
 ```
 
 Proposed delta:

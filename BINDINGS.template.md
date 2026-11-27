@@ -7,23 +7,23 @@ Copy this file to `BINDINGS.md` and replace every line of the second column. Wri
 | Term | Here | Needed by |
 | --- | --- | --- |
 | Maintainer | The one person who decides intent and signs | Ownership; everything |
-| Tutor | The person who answers for derived work. May be the maintainer | Core paths; `explained-by`; the `Tutor:` trailer |
+| Tutor | The person who answers for derived work. May be the maintainer | All derived work; the `Tutor:` trailer |
 | Instruction files | Every file that instructs an agent working here: `AGENTS.md`, `CLAUDE.md`, rules and skill directories, written policies. Not agent files the product ships | The deep breath; the inventory |
 | Packages | What a module is here: crates, packages, directories, design units | Units of intent |
 | Prose | Where documents live | The inventory |
 | Review log, onboarding document | Their paths and your rules for them, or "none" | Your own rules |
+| Strategies | The cross-cutting units of this project. Default: assurance (testing and verification), compliance, documentation. Split one or add others, such as evaluation or security. Name the units only; what each says is for the paper rounds | The first pass |
 | Plans | Where roadmaps and plans live, including outside the repository | Plans and unfinished work |
 | Interfaces | How a capability is reached: command line, HTTP, a library API, a bus, top-level ports, a topic or action, an agent entry point | Triage; extraction |
 | Pilot | One small capability, the most mechanical you have | Step 1 |
 | First slice | The capability aligned after the pilot. Once closed, it is the first area | Step 5; the end of the deep breath |
 | The main promise | The correctness claim the project's value rests on, in one sentence, or "none" | The project item |
-| Order of capabilities | Your ranking. Default: reported wrong results; then value and risk of a silent wrong result; then shared core modules; then frequency of use | Step 5 |
+| Order of capabilities | Your ranking. Default: reported wrong results; then value and risk of a silent wrong result; then shared modules; then frequency of use | Step 5 |
 | Time box per slice | A duration | Step 5 |
 | Hold label | The issue label that freezes open issues | The deep breath |
 | Wrong-result class | How an issue is marked as a wrong result, and your existing rules for fixing one | The exception to the deep breath |
 | Where the baseline runs | The machine or job that runs the full checks | Step 2 |
 | Triage tooling | Tools for coverage, fault injection and duplication, or "none" | Step 4 |
-| Paths that are never lowered to supporting | A list or a file, or "none" | Zones |
 | Design checker | The tool that checks design-level models, or "none" | Design properties |
 | Recorded checks | Checks the gate cannot run (long, licensed, physical); where their results are kept, out of agents' reach, and who may record | The gate |
 | Statistical checks | Runs, seeds, and the pinned model or simulator version, or "none" | The baseline; budgets |

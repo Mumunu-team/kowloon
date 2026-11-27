@@ -14,7 +14,6 @@ For a while at least, good grief.
 | `ALIGNMENT.md` | What an agent reads in every session, what tries to keep it confirming and honoring intent |
 | `method/` | Four files an agent reads on demand |
 | `BINDINGS.template.md` | The one file you need to instantiate for your own project |
-| `EXAMPLES.md` | Four informative spec items: hardware, agents, software, robotics. |
 
 ## When a project moves to Kowloon
 

@@ -19,7 +19,7 @@ The trace map is deliberately not in the manifest; section 5 says why that is sa
 
 ## 11. The gate
 
-Not to be started; each part begins only on the maintainer's explicit instruction. A single script, run locally and as a required check, verifies with text tools only:
+A single script, run locally and as a required check, verifies with text tools only:
 
 - the manifest and its signature, as in section 10;
 - that every tracked path has a class, every derived path has an intent, and every intent names a signed spec item;
@@ -29,13 +29,12 @@ Not to be started; each part begins only on the maintainer's explicit instructio
 - that each linked check has a negative control that fails;
 - that `constraint` items match their listings and budgets hold;
 - that every assumption is named by a behaviour, and no hypothesis is past its date;
-- that every path marked supporting still has its fault-injection check;
 - that no linked check that passed in the baseline now fails;
 - the change-of-intent conditions of section 8;
 - that a closed area has no candidates, deltas or task lists left under `alignment/`;
 - that `ALIGNMENT.md` and each file under `method/` is within its word cap, constants in the gate script set at the sizes of the signed version.
 
-An agent's part in enforcement is to run the script and read its exit code. In an area that is not closed the gate reports and never fails; in a closed area it fails. A gate that uses an external tool pins a released version of it.
+The script also reports every open finding whose question is overdue (section 4). An agent's part in enforcement is to run the script and read its exit code. In an area that is not closed the gate reports and never fails; in a closed area it fails. A gate that uses an external tool pins a released version of it.
 
 **How the gate is provided.** In three layers, so that no project has its agent write its own checker.
 
@@ -53,7 +52,7 @@ An agent may draft the script and the fixtures; the maintainer signs them. The f
 - files added since the last signed manifest, by pattern;
 - documents that nothing references, or that name a command or flag absent from the recorded interface listings;
 - remote branches older than an age the maintainer sets;
-- core modules changed since the tutor last answered for them, as the list for the sampled conversation.
+- modules changed since the tutor last answered for them, as the list for the sampled conversation.
 
 **Sampled, with the report.** A blind session that has not seen a check plants a violation from the item's sentence, in the code or in an agent's instructions and never on a physical rig. A check that still passes is a finding. A statistical check is scored over its full run count.
 
